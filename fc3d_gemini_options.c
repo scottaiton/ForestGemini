@@ -41,10 +41,6 @@ gemini_register (fc3d_gemini_options_t* gemopt, sc_options_t * opt)
                         "[Gemini] Sample flag [0]");
 
 
-    fclaw_options_add_int_array (opt, 0, "array", &gemopt->array_string, "1 2 3",
-                               &gemopt->array, 3, "[Gemini] Example array [1 2 3]");
-
-
     /* Array of NumFaces=4 values */
     fclaw_options_add_int_array (opt, 0, "mthbc", &gemopt->mthbc_string, "1 1 1 1 1 1",
                                  &gemopt->mthbc, 6,
@@ -64,7 +60,7 @@ gemini_register (fc3d_gemini_options_t* gemopt, sc_options_t * opt)
 static fclaw_exit_type_t
 gemini_postprocess (fc3d_gemini_options_t * gemopt)
 {
-    fclaw_options_convert_int_array (gemopt->array_string, &gemopt->array,3);
+    fclaw_options_convert_int_array (gemopt->mthbc_string, &gemopt->mthbc,5);
     
     return FCLAW_NOEXIT;
 }
@@ -88,7 +84,7 @@ gemini_check(fc3d_gemini_options_t *gemopt,
 static
 void gemini_destroy (fc3d_gemini_options_t * gemopt)
 {
-    fclaw_options_destroy_array (gemopt->array);
+    fclaw_options_destroy_array (gemopt->mthbc);
 }
 
 /* ------------------------------------------------------

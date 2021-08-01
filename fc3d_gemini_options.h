@@ -40,9 +40,6 @@ struct fc3d_gemini_options
 {
     int flag;
 
-    const char *array_string;
-    int *array;
-
     const char *mthbc_string;
     int *mthbc;
 

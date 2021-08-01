@@ -67,6 +67,8 @@ void run_program(fclaw2d_global_t* glob)
 
     /* Initialize virtual table for ForestClaw */
     fclaw2d_vtables_initialize(glob);
+
+
     FCLAW_ASSERT(user_opt->claw_version == 4);
 
     fc3d_gemini_solver_initialize();
@@ -77,9 +79,7 @@ void run_program(fclaw2d_global_t* glob)
        Run
        --------------------------------------------------------------- */
     fclaw2d_initialize(glob);
-    // fclaw2d_run(glob);
-
-    fclaw_global_essentialf("Running gemini ...\n");
+    fclaw2d_run(glob);
 
     fclaw2d_finalize(glob);
 }
