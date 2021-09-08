@@ -1,45 +1,40 @@
+cmake_minimum_required(VERSION 3.13...3.20)
+set(CMAKE_FIND_PACKAGE_PREFER_CONFIG ON)
+
+project(FC3DGEMINI LANGUAGES C CXX Fortran)
+
+find_package(MPI)
+
+# --- get installed ForestClaw package
+find_package(FORESTCLAW REQUIRED)
+
 # -- fortran library
 add_library(gemini_f OBJECT
   fortran_source/fc3d_gemini_bc3_default.f90 
   fortran_source/fc3d_gemini_block.f90 
 )
-
 target_include_directories(gemini_f INTERFACE ${CMAKE_CURRENT_BINARY_DIR}/include)
 
 # -- add library
-add_library(gemini)
-set_target_properties(gemini PROPERTIES EXPORT_NAME GEMINI)
+add_library(fc3d_gemini)
+set_target_properties(fc3d_gemini PROPERTIES EXPORT_NAME GEMINI)
 
-target_sources(gemini PRIVATE 
+target_sources(fc3d_gemini PRIVATE 
   fc3d_gemini.cpp 
   fc3d_gemini_options.c
   $<TARGET_OBJECTS:gemini_f>
 )
 
-target_link_libraries(gemini PUBLIC clawpatch)
+target_link_libraries(fc3d_gemini PUBLIC  FORESTCLAW::CLAWPATCH FORESTCLAW::FORESTCLAW)
 
-target_include_directories(gemini
+target_include_directories(fc3d_gemini
   INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
   $<INSTALL_INTERFACE:include>
 )
 
-# -- install
-
-install(FILES
-	fc3d_clawpack46.h
-	fc3d_clawpack46_options.h
-	clawpack46_user_fort.h
-	fc3d_clawpack46_fort.h 
-  DESTINATION include
-)
-
-install(TARGETS gemini
-  EXPORT ${PROJECT_NAME}Targets
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib)
-
-
 # -- imported target, for use from FetchContent
 add_library(FORESTCLAW::GEMINI INTERFACE IMPORTED GLOBAL)
-target_link_libraries(FORESTCLAW::GEMINI INTERFACE gemini)
+target_link_libraries(FORESTCLAW::GEMINI INTERFACE fc3d_gemini)
+
+add_subdirectory(examples)

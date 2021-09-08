@@ -27,15 +27,15 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "fc3d_gemini_options.h"
 #include "fc3d_gemini_fort.h"
 
-#include <fclaw2d_clawpatch.hpp>
-#include <fclaw2d_clawpatch.h>
+#include <fclaw3dx_clawpatch.hpp>
+#include <fclaw3dx_clawpatch.h>
 
-#include <fclaw2d_clawpatch_options.h>
-#include <fclaw2d_clawpatch_output_ascii.h> 
-#include <fclaw2d_clawpatch_output_vtk.h>
-#include <fclaw2d_clawpatch_fort.h>
+#include <fclaw3dx_clawpatch_options.h>
+#include <fclaw3dx_clawpatch_output_ascii.h> 
+#include <fclaw3dx_clawpatch_output_vtk.h>
+#include <fclaw3dx_clawpatch_fort.h>
 
-#include <fclaw2d_clawpatch_conservation.h>
+#include <fclaw3dx_clawpatch_conservation.h>
 
 #include <fclaw2d_patch.h>
 #include <fclaw2d_global.h>
@@ -67,18 +67,18 @@ void gemini_qinit(fclaw2d_global_t *glob,
 {
 	int mx,my,mz,mbc;
 	double dx,dy,dz, xlower,ylower, zlower;
-	fclaw2d_clawpatch_grid_data(glob,patch,&mx,&my,&mz,&mbc,
+	fclaw3dx_clawpatch_grid_data(glob,patch,&mx,&my,&mz,&mbc,
 								&xlower,&ylower,&zlower, 
 								&dx,&dy,&dz);
 
 	int meqn;
 	double *q;
-	fclaw2d_clawpatch_soln_data(glob,patch,&q,&meqn);
+	fclaw3dx_clawpatch_soln_data(glob,patch,&q,&meqn);
 
 	/* Auxillary data, such as metric terms */
 	int maux;
 	double *aux;
-	fclaw2d_clawpatch_aux_data(glob,patch,&aux,&maux);
+	fclaw3dx_clawpatch_aux_data(glob,patch,&aux,&maux);
 
 	fc3d_gemini_vtable_t*  gemini_vt = fc3d_gemini_vt();
 
@@ -108,12 +108,12 @@ void gemini_bc3(fclaw2d_global_t *glob,
 
 	int mx,my,mz, mbc;
 	double dx,dy,dz, xlower,ylower, zlower;
-	fclaw2d_clawpatch_grid_data(glob,patch, &mx,&my,&mz,&mbc,
+	fclaw3dx_clawpatch_grid_data(glob,patch, &mx,&my,&mz,&mbc,
 								&xlower,&ylower,&zlower, &dx,&dy,&dz);
 
 	double *aux;
 	int maux;
-	fclaw2d_clawpatch_aux_data(glob,patch,&aux,&maux);
+	fclaw3dx_clawpatch_aux_data(glob,patch,&aux,&maux);
 
 	fc3d_gemini_options_t *gemopt = fc3d_gemini_get_options(glob);
 	int *block_mthbc = gemopt->mthbc;
@@ -139,7 +139,7 @@ void gemini_bc3(fclaw2d_global_t *glob,
 	*/
 	double *q;
 	int meqn;
-	fclaw2d_clawpatch_timesync_data(glob,patch,time_interp,&q,&meqn);
+	fclaw3dx_clawpatch_timesync_data(glob,patch,time_interp,&q,&meqn);
 
 	gemini_vt->fort_bc3(&blockno, &meqn,&mbc,&mx,&my,&mz,&xlower,&ylower,&zlower,
 						&dx,&dy,&dz, q,&maux,aux,&t,&dt,mthbc);
@@ -162,16 +162,16 @@ void gemini_b4step3(fclaw2d_global_t *glob,
 
 	int mx,my,mz,mbc;
 	double xlower,ylower,zlower,dx,dy,dz;
-	fclaw2d_clawpatch_grid_data(glob,patch, &mx,&my,&mz, &mbc,
+	fclaw3dx_clawpatch_grid_data(glob,patch, &mx,&my,&mz, &mbc,
 								&xlower,&ylower,&zlower,&dx,&dy,&dz);
 
 	int meqn;
 	double *q;
-	fclaw2d_clawpatch_soln_data(glob,patch,&q,&meqn);
+	fclaw3dx_clawpatch_soln_data(glob,patch,&q,&meqn);
 
 	int maux;
 	double *aux;
-	fclaw2d_clawpatch_aux_data(glob,patch,&aux,&maux);
+	fclaw3dx_clawpatch_aux_data(glob,patch,&aux,&maux);
 
 	gemini_vt->fort_b4step3(&blockno,&mbc,&mx,&my,&mz, &meqn,q, 
 	                        &xlower,&ylower,&zlower,
@@ -194,16 +194,16 @@ void gemini_src3(fclaw2d_global_t *glob,
 
 	int mx,my,mz, mbc;
 	double xlower,ylower,zlower,dx,dy,dz;
-	fclaw2d_clawpatch_grid_data(glob,patch, &mx,&my,&mz, &mbc,
+	fclaw3dx_clawpatch_grid_data(glob,patch, &mx,&my,&mz, &mbc,
 								&xlower,&ylower,&zlower, &dx,&dy, &dz);
 
 	double *q;
 	int meqn;
-	fclaw2d_clawpatch_soln_data(glob,patch,&q,&meqn);
+	fclaw3dx_clawpatch_soln_data(glob,patch,&q,&meqn);
 
 	double *aux;
 	int maux;
-	fclaw2d_clawpatch_aux_data(glob,patch,&aux,&maux);
+	fclaw3dx_clawpatch_aux_data(glob,patch,&aux,&maux);
 
 	gemini_vt->fort_src3(&blockno, &meqn,&mbc,&mx,&my,&mz, &xlower,&ylower,&zlower,
 						 &dx,&dy,&dz, q,&maux,aux,&t,&dt);
@@ -230,11 +230,11 @@ void gemini_setaux(fclaw2d_global_t *glob,
 
 	int mx,my,mz,mbc;
 	double xlower,ylower,zlower, dx,dy, dz;
-	fclaw2d_clawpatch_grid_data(glob,patch, &mx,&my,&mz,&mbc,
+	fclaw3dx_clawpatch_grid_data(glob,patch, &mx,&my,&mz,&mbc,
 								&xlower,&ylower,&zlower, &dx,&dy, &dz);
 	int maux;
 	double *aux;
-	fclaw2d_clawpatch_aux_data(glob,patch,&aux,&maux);
+	fclaw3dx_clawpatch_aux_data(glob,patch,&aux,&maux);
 
 	gemini_vt->fort_setaux(&blockno,&mbc,&mx,&my,&mz, &xlower,&ylower,&zlower, 
 	                       &dx,&dy,&dz, &maux,aux);
@@ -260,18 +260,18 @@ double gemini_step3(fclaw2d_global_t *glob,
 
 	int maux;
 	double *aux;
-	fclaw2d_clawpatch_aux_data(glob,patch,&aux,&maux);
+	fclaw3dx_clawpatch_aux_data(glob,patch,&aux,&maux);
 
-	fclaw2d_clawpatch_save_current_step(glob, patch);
+	fclaw3dx_clawpatch_save_current_step(glob, patch);
 
 	int mx, my, mz, mbc;
 	double xlower, ylower, zlower, dx,dy, dz;
-	fclaw2d_clawpatch_grid_data(glob,patch,&mx,&my,&mz,&mbc,
+	fclaw3dx_clawpatch_grid_data(glob,patch,&mx,&my,&mz,&mbc,
 								&xlower,&ylower,&zlower, &dx,&dy,&dz);
 
 	int meqn;
 	double *qold;
-	fclaw2d_clawpatch_soln_data(glob,patch,&qold,&meqn);
+	fclaw3dx_clawpatch_soln_data(glob,patch,&qold,&meqn);
 
 	/* Take a step on a single patch; return a cfl number (or not :-)) */
 	double cflgrid = 0.9;   
@@ -333,7 +333,7 @@ void gemini_output(fclaw2d_global_t *glob, int iframe)
 	                  = fc3d_gemini_get_options(glob);
 
 	if (gemopt->vtk_out != 0)
-		fclaw2d_clawpatch_output_vtk(glob,iframe);
+		fclaw3dx_clawpatch_output_vtk(glob,iframe);
 
 	if (gemopt->hdf5_out != 0)
 		fclaw_global_essentialf("HDF5 : Not yet implemented\n");
@@ -359,9 +359,9 @@ void fc3d_gemini_solver_initialize()
 
 	/* Decide on data layout */
 	int claw_version = 4;
-	fclaw2d_clawpatch_vtable_initialize(claw_version);
+	fclaw3dx_clawpatch_vtable_initialize(claw_version);
 
-    //fclaw2d_clawpatch_vtable_t*      clawpatch_vt = fclaw2d_clawpatch_vt();
+    //fclaw3dx_clawpatch_vtable_t*      clawpatch_vt = fclaw3dx_clawpatch_vt();
 
 
 	/* ForestClaw core vtable items */
@@ -405,7 +405,7 @@ fc3d_gemini_vtable_t* fc3d_gemini_vt()
 	return &s_gemini_vt;
 }
 
-/* This should only be called when a new fclaw2d_clawpatch_t is created. */
+/* This should only be called when a new fclaw3dx_clawpatch_t is created. */
 void fc3d_gemini_set_capacity(fclaw2d_global_t *glob,
                               fclaw2d_patch_t *patch,
                               int blockno,
@@ -415,14 +415,14 @@ void fc3d_gemini_set_capacity(fclaw2d_global_t *glob,
 
 	int mx,my,mz, mbc;
 	double dx,dy,dz, xlower,ylower,zlower;
-	fclaw2d_clawpatch_grid_data(glob,patch, &mx,&my,&mz,&mbc,
+	fclaw3dx_clawpatch_grid_data(glob,patch, &mx,&my,&mz,&mbc,
 								&xlower,&ylower,&zlower,&dx,&dy,&dz);
 
-	double *area = fclaw2d_clawpatch_get_area(glob,patch);
+	double *area = fclaw3dx_clawpatch_get_area(glob,patch);
 
 	int maux;
 	double *aux;
-	fclaw2d_clawpatch_aux_data(glob,patch,&aux,&maux);
+	fclaw3dx_clawpatch_aux_data(glob,patch,&aux,&maux);
 
 #if 0
 	GEMINI_SET_CAPACITY(&mx,&my,&mz,&mbc,&dx,&dy,&dz,area,&mcapa,

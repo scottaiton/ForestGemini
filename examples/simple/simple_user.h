@@ -35,10 +35,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <fc3d_gemini_fort_user.h>
 
 /* Headers for both Clawpack 4.6 and  Clawpack 5.0 */
-#include <fclaw2d_clawpatch.h>
-#include <fclaw2d_clawpatch_options.h>
-#include <fclaw2d_clawpatch_fort.h>
-#include <fclaw2d_clawpatch46_fort.h>
+#include <fclaw3dx_clawpatch.h>
+#include <fclaw3dx_clawpatch_options.h>
+#include <fclaw3dx_clawpatch_fort.h>
+#include <fclaw3dx_clawpatch46_fort.h>
 // #include <fclaw2d_clawpatch_pillow.h>
 
 
