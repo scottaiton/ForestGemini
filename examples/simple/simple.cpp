@@ -26,7 +26,7 @@
 #include "simple_user.h"
 
 #include <fclaw2d_defs.h>
-
+#include <gemini_main.h>
 static
 fclaw2d_domain_t* create_domain(sc_MPI_Comm mpicomm, 
                                 fclaw_options_t* fclaw_opt)
@@ -79,7 +79,8 @@ void run_program(fclaw2d_global_t* glob)
        Run
        --------------------------------------------------------------- */
     fclaw2d_initialize(glob);
-    fclaw2d_run(glob);
+    //fclaw2d_run(glob);
+    gemini3d_sub_();
 
     fclaw2d_finalize(glob);
 }

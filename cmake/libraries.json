@@ -1,0 +1,6 @@
+{
+  "gemini3d": {
+    "git": "https://github.com/scottaiton/gemini3d.git",
+    "tag": "feature_fclaw"
+  }
+}

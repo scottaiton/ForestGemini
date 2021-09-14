@@ -7,6 +7,9 @@ find_package(MPI)
 
 # --- get installed ForestClaw package
 find_package(FORESTCLAW REQUIRED)
+add_subdirectory(gemini3d)
+#include(cmake/libraries.cmake)
+#include(cmake/gemini3d.cmake)
 
 # -- fortran library
 add_library(gemini_f OBJECT
@@ -25,7 +28,7 @@ target_sources(fc3d_gemini PRIVATE
   $<TARGET_OBJECTS:gemini_f>
 )
 
-target_link_libraries(fc3d_gemini PUBLIC  FORESTCLAW::CLAWPATCH FORESTCLAW::FORESTCLAW)
+target_link_libraries(fc3d_gemini PUBLIC  FORESTCLAW::CLAWPATCH FORESTCLAW::FORESTCLAW gemini3d::gemini3d)
 
 target_include_directories(fc3d_gemini
   INTERFACE

@@ -1,0 +1,3 @@
+[submodule "gemini3d"]
+	path = gemini3d
+	url = https://github.com/scottaiton/gemini3d
