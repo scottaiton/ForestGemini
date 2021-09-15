@@ -80,7 +80,11 @@ void run_program(fclaw2d_global_t* glob)
        --------------------------------------------------------------- */
     fclaw2d_initialize(glob);
     //fclaw2d_run(glob);
-    gemini3d_sub_();
+    char * out_dir = "gemini";
+    int out_dir_len = strlen(out_dir);
+    int use_cli = false;
+
+    gemini_main(out_dir,&out_dir_len,,&false);
 
     fclaw2d_finalize(glob);
 }
