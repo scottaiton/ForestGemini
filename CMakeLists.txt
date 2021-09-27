@@ -5,9 +5,19 @@ project(FC3DGEMINI LANGUAGES C CXX Fortran)
 
 find_package(MPI)
 
+include(CTest)
+
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
+
+include(cmake/libraries.cmake)
+include(cmake/compiler_flags.cmake)
+
+# External Projects
+include(cmake/gemini3d.cmake)
+#include(cmake/forestclaw.cmake)
 # --- get installed ForestClaw package
 find_package(FORESTCLAW REQUIRED)
-add_subdirectory(gemini3d)
+#add_subdirectory(gemini3d)
 #include(cmake/libraries.cmake)
 #include(cmake/gemini3d.cmake)
 

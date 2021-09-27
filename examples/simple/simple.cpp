@@ -26,7 +26,9 @@
 #include "simple_user.h"
 
 #include <fclaw2d_defs.h>
-#include <gemini_main.h>
+extern "C" {
+    void gemini_main(const char* out_dir,int* Lout_dir,int* lid2in,int* lid3in,int* use_cli);
+}
 static
 fclaw2d_domain_t* create_domain(sc_MPI_Comm mpicomm, 
                                 fclaw_options_t* fclaw_opt)
@@ -80,11 +82,14 @@ void run_program(fclaw2d_global_t* glob)
        --------------------------------------------------------------- */
     fclaw2d_initialize(glob);
     //fclaw2d_run(glob);
-    char * out_dir = "gemini";
-    int out_dir_len = strlen(out_dir);
-    int use_cli = false;
 
-    gemini_main(out_dir,&out_dir_len,,&false);
+    const char * out_dir = "mini3d_fang";
+    int out_dir_len = strlen(out_dir);
+    int lid2in = 0;
+    int lid3in = 0;
+    int use_cli = true;
+
+    gemini_main(out_dir,&out_dir_len,&lid2in,&lid3in,&use_cli);
 
     fclaw2d_finalize(glob);
 }
