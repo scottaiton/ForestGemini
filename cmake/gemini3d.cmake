@@ -137,6 +137,11 @@ if(MUMPS_FOUND)
 endif()
 
 if(SCALAPACK_FOUND)
+  #fix for homebrew installed scalapack
+  if(NOT TARGET SCALAPACK::SCALAPACK AND TARGET scalapack)
+    add_library(SCALAPACK::SCALAPACK INTERFACE IMPORTED)
+    target_link_libraries(SCALAPACK::SCALAPACK INTERFACE scalapack)
+  endif()
   target_link_libraries(gemini3d::gemini3d INTERFACE SCALAPACK::SCALAPACK)
 endif()
 
