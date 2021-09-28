@@ -1,0 +1,16 @@
+{
+  "equilibrium": {
+    "eq_dir": "/home/beef/sims/mini3d_eq"
+  },
+  "git": {
+    "branch": "main",
+    "commit": "v1.5.1",
+    "porcelain": "true",
+    "remote": "https://github.com/gemini3d/pygemini",
+    "version": "git version 2.27.0"
+  },
+  "python": {
+    "platform": "linux",
+    "version": "3.9.5 (default, Jun  4 2021, 12:28:51) \n[GCC 7.5.0]"
+  }
+}
