@@ -1,0 +1,29 @@
+&FILES
+ INPUT_NML="/home/beef/sims/mini3d_glow/inputs/config.nml",
+ OUTPUT_DIR="/home/beef/sims/mini3d_glow",
+ REALBITS=64         ,
+ /
+&GIT
+ GIT_VERSION="2.27.0",
+ BRANCH="main",
+ REV="v1.0.3-67-gabb7326f 1.0.3",
+ PORCELAIN="true",
+ /
+&SYSTEM
+ COMPILER="GCC version 8.5.0 20210514 (Red Hat 8.5.0-3)",
+ COMPILER_FLAGS="-I /home/beef/code/gemini3d/build/src/io -I /home/beef/code/gemini3d/build/src/numerical/calculus/include -I /home/beef/code/gemini3d/build/src/io/include -I /home/beef/code/gemini3d/build/src/numerical/include -I /home/beef/code/gemini3d/build/src/numerical/grid/include -I /home/beef/code/gemini3d/build/src/mpimod/include -I /home/beef/code/gemini3d/build/src/io/pathlib/include -I /home/beef/code/gemini3d/build/src/temporal/include -I /home/beef/code/gemini3d/build/include --param l1-cache-size=32 --param l1-cache-line-size=64 --param l2-cache-size=22528 -mtune=skylake-avx512 -march=x86-64 -auxbase-strip src/io/CMakeFiles/io.dir/output.f90.o -O3 -O3 -Wno-unused-dummy-argument -Wno-unused-variable -Wno-unused-function -Wno-do-subscript -fimplicit-none -fno-backtrace -fpreprocessed -J src/io/include",
+ EXE="/home/beef/code/gemini3d/build/gemini.bin",
+ /
+&GRID
+ LID=24         ,
+ LID2=6          ,
+ LID3=4          ,
+ LX1=48         ,
+ LX2=2          ,
+ LX3=4          ,
+ LX2ALL=12         ,
+ LX3ALL=16         ,
+ /
+&MILESTONE
+ MCADENCE=-1         ,
+ /
