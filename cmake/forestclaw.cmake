@@ -53,6 +53,7 @@ set(forestclaw_args
 -DCMAKE_BUILD_TYPE=Release
 -DBUILD_TESTING:BOOL=false
 -Dclawpack:BOOL=true
+-Dmpi:BOOL=true
 )
 
 # - external project
