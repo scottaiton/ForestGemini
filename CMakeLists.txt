@@ -14,12 +14,11 @@ include(cmake/compiler_flags.cmake)
 
 # External Projects
 include(cmake/gemini3d.cmake)
-#include(cmake/forestclaw.cmake)
-# --- get installed ForestClaw package
-find_package(FORESTCLAW REQUIRED)
-#add_subdirectory(gemini3d)
-#include(cmake/libraries.cmake)
-#include(cmake/gemini3d.cmake)
+
+find_package(FORESTCLAW)
+if(NOT TARGET FORESTCLAW::FORESTCLAW)
+  include(cmake/forestclaw.cmake)
+endif()
 
 # -- fortran library
 add_library(gemini_f OBJECT
