@@ -14,6 +14,8 @@ if(NOT FCLAW_ROOT)
   endif()
 endif()
 
+find_package(MPI COMPONENTS C REQUIRED)
+find_package(ZLIB)
 find_package(SC)
 find_package(P4EST)
 
@@ -81,5 +83,13 @@ else()
   target_link_libraries(FORESTCLAW::FORESTCLAW INTERFACE ${P4EST_LIBRARIES})
 endif()
 
+if(ZLIB_FOUND)
+  target_link_libraries(FORESTCLAW::FORESTCLAW INTERFACE ZLIB::ZLIB)
+endif()
+
+target_link_libraries(FORESTCLAW::FORESTCLAW INTERFACE MPI::MPI_C)
+
 target_link_libraries(FORESTCLAW::CLAWPATCH INTERFACE ${CLAWPATCH_LIBRARIES})
 target_include_directories(FORESTCLAW::CLAWPATCH INTERFACE ${FORESTCLAW_INCLUDE_DIRS})
+
+add_dependencies(FORESTCLAW::FORESTCLAW FORESTCLAW)
