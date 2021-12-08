@@ -26,9 +26,10 @@
 #include "simple_user.h"
 
 #include <fclaw2d_defs.h>
-extern "C"{
+
 #include <gemini3d.h>
-}
+
+
 static
 fclaw2d_domain_t* create_domain(sc_MPI_Comm mpicomm, 
                                 fclaw_options_t* fclaw_opt)
@@ -90,7 +91,11 @@ void run_program(fclaw2d_global_t* glob)
     int lid3in = -1;
     bool use_cli = false;
 
-    gemini_main(out_dir,&out_dir_len,&lid2in,&lid3in,&use_cli);
+    int meqn;
+    double *q;
+    fclaw3dx_clawpatch_soln_data(glob,patch,&q,&meqn);
+
+    gemini_main(out_dir,&out_dir_len,&lid2in,&lid3in,&use_cli,q);
 
     fclaw2d_finalize(glob);
 }
@@ -142,9 +147,9 @@ main (int argc, char **argv)
         fclaw2d_global_store_domain(glob, domain);
 
         /* Store option packages in glob */
-        fclaw2d_options_store           (glob, fclaw_opt);
+        fclaw2d_options_store            (glob, fclaw_opt);
         fclaw3dx_clawpatch_options_store (glob, clawpatch_opt);
-        fc3d_gemini_options_store   (glob, gem_opt);
+        fc3d_gemini_options_store        (glob, gem_opt);
         simple_options_store             (glob, user_opt);
 
         run_program(glob);
