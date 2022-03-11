@@ -12,17 +12,9 @@ list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
 include(cmake/libraries.cmake)
 include(cmake/compiler_flags.cmake)
 
-# External Projects
-#find_package(gemini3d)
-#if(NOT TARGET gemini3d::gemini3d)
-#include(cmake/gemini3d.cmake)
-#endif()
-
-
-find_package(FORESTCLAW)
-#if(NOT TARGET FORESTCLAW::FORESTCLAW)
-#  include(cmake/forestclaw.cmake)
-#endif()
+# libraries
+find_package(gemini3d)
+find_package(FORESTCLAW REQUIRED)
 
 # -- fortran library : dummy library containing .o files compiled from Fortran
 add_library(gemini_f OBJECT
@@ -42,7 +34,7 @@ target_sources(fc3d_gemini PRIVATE
 )
 
 target_link_libraries(fc3d_gemini PUBLIC FORESTCLAW::CLAWPATCH FORESTCLAW::FORESTCLAW)
-#target_link_libraries(fc3d_gemini PUBLIC gemini3d::gemini3d)
+target_link_libraries(fc3d_gemini PUBLIC gemini3d::gemini3d)
 
 target_include_directories(fc3d_gemini
   INTERFACE
