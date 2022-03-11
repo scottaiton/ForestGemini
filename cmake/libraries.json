@@ -1,10 +1,14 @@
 {
   "forestclaw": {
-    "git": "https://github.com/scottaiton/forestclaw.git",
-    "tag": "feature_2d3druntime"
+    "git": "https://github.com/ForestClaw/forestclaw.git",
+    "tag": "develop"
   },
   "gemini3d": {
     "git": "https://github.com/gemini3d/gemini3d.git",
     "tag": "main"
+  },
+  "iniparser": {
+    "git": "https://github.com/ndevilla/iniparser.git",
+    "tag": "0a38e85c9cde1e099ca3bf70083bd00f89c3e5b6"
   }
 }

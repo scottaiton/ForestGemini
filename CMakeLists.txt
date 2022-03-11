@@ -13,16 +13,16 @@ include(cmake/libraries.cmake)
 include(cmake/compiler_flags.cmake)
 
 # External Projects
-find_package(gemini3d)
-if(NOT TARGET gemini3d::gemini3d)
-  include(cmake/gemini3d.cmake)
-endif()
+#find_package(gemini3d)
+#if(NOT TARGET gemini3d::gemini3d)
+#include(cmake/gemini3d.cmake)
+#endif()
 
 
 find_package(FORESTCLAW)
-if(NOT TARGET FORESTCLAW::FORESTCLAW)
-  include(cmake/forestclaw.cmake)
-endif()
+#if(NOT TARGET FORESTCLAW::FORESTCLAW)
+#  include(cmake/forestclaw.cmake)
+#endif()
 
 # -- fortran library : dummy library containing .o files compiled from Fortran
 add_library(gemini_f OBJECT
@@ -41,16 +41,13 @@ target_sources(fc3d_gemini PRIVATE
   $<TARGET_OBJECTS:gemini_f>
 )
 
-target_link_libraries(fc3d_gemini PUBLIC  FORESTCLAW::CLAWPATCH FORESTCLAW::FORESTCLAW gemini3d::gemini3d)
+target_link_libraries(fc3d_gemini PUBLIC FORESTCLAW::CLAWPATCH FORESTCLAW::FORESTCLAW)
+#target_link_libraries(fc3d_gemini PUBLIC gemini3d::gemini3d)
 
 target_include_directories(fc3d_gemini
   INTERFACE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
   $<INSTALL_INTERFACE:include>
 )
-
-# -- imported target, for use from FetchContent (not needed)
-# add_library(FORESTCLAW::GEMINI INTERFACE IMPORTED GLOBAL)
-# target_link_libraries(FORESTCLAW::GEMINI INTERFACE fc3d_gemini)
 
 add_subdirectory(examples)

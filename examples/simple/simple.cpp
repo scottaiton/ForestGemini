@@ -27,7 +27,7 @@
 
 #include <fclaw2d_defs.h>
 
-#include <gemini3d.h>
+//#include <gemini3d.h>
 
 
 static
@@ -93,9 +93,9 @@ void run_program(fclaw2d_global_t* glob)
 
     int meqn;
     double *q;
-    fclaw3dx_clawpatch_soln_data(glob,patch,&q,&meqn);
+//    fclaw3dx_clawpatch_soln_data(glob,patch,&q,&meqn);
 
-    gemini_main(out_dir,&out_dir_len,&lid2in,&lid3in,&use_cli,q);
+//    gemini_main(out_dir,&out_dir_len,&lid2in,&lid3in,&use_cli,q);
 
     fclaw2d_finalize(glob);
 }

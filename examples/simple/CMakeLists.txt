@@ -19,7 +19,7 @@ target_include_directories(simple PRIVATE
 )
 
 target_link_libraries(simple PRIVATE 
- FORESTCLAW::GEMINI
+ fc3d_gemini
 )
 
 add_test(NAME examples_simple COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/regressions.sh WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
