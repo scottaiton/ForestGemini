@@ -10,9 +10,10 @@ enable_testing()
 
 cmake_path(SET CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules)
 
+include(cmake/options.cmake)
 include(cmake/compiler_flags.cmake)
 
-# libraries
+# Gemini3D
 # WORKAROUND: until Gemini3D package updated, we find packages here.
 # the best way to do this is with find_dependency() calls in gemini3d:cmake/config.cmake.in
 set(arith d)
@@ -28,6 +29,9 @@ find_package(msis CONFIG REQUIRED)
 find_package(glow CONFIG REQUIRED)
 find_package(hwm14 CONFIG)
 find_package(gemini3d CONFIG REQUIRED)
+
+# ForestClaw: build as ExternalProject
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/forestclaw.cmake)
 
 # -- fortran library : dummy library containing .o files compiled from Fortran
 add_library(gemini_f OBJECT
