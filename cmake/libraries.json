@@ -6,9 +6,5 @@
   "gemini3d": {
     "git": "https://github.com/gemini3d/gemini3d.git",
     "tag": "main"
-  },
-  "iniparser": {
-    "git": "https://github.com/ndevilla/iniparser.git",
-    "tag": "0a38e85c9cde1e099ca3bf70083bd00f89c3e5b6"
   }
 }

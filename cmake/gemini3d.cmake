@@ -5,10 +5,6 @@ include(ExternalProject)
 # for user programs
 add_library(gemini3d::gemini3d INTERFACE IMPORTED)
 
-if(NOT GEMINI_ROOT)
-  set(GEMINI_ROOT ${CMAKE_INSTALL_PREFIX})
-endif()
-
 find_package(MPI COMPONENTS C Fortran REQUIRED)
 find_package(HWLOC)
 
@@ -22,59 +18,42 @@ find_package(LAPACK REQUIRED)
 
 add_executable(gemini3d.compare IMPORTED)
 set_target_properties(gemini3d.compare PROPERTIES
-IMPORTED_LOCATION ${GEMINI_ROOT}/bin/gemini3d.compare
+IMPORTED_LOCATION ${CMAKE_INSTALL_PREFIX}/bin/gemini3d.compare
 )
 
-set(GEMINI_LIBRARIES
-${GEMINI_ROOT}/lib/${CMAKE_${lib_type}_LIBRARY_PREFIX}gemini3d${CMAKE_${lib_type}_LIBRARY_SUFFIX})
-
-set(GEMINI_INCLUDE_DIRS ${GEMINI_ROOT}/include)
-
-# libraries needed by Gemini3D
-set(h5fortran_LIBRARIES
-${GEMINI_ROOT}/lib/${CMAKE_${lib_type}_LIBRARY_PREFIX}h5fortran${CMAKE_${lib_type}_LIBRARY_SUFFIX}
-)
-
-set(nc4fortran_LIBRARIES
-${GEMINI_ROOT}/lib/${CMAKE_${lib_type}_LIBRARY_PREFIX}nc4fortran${CMAKE_${lib_type}_LIBRARY_SUFFIX}
-)
-
-set(GLOW_LIBRARIES
-${GEMINI_ROOT}/lib/${CMAKE_${lib_type}_LIBRARY_PREFIX}glow${CMAKE_${lib_type}_LIBRARY_SUFFIX}
-)
-
-set(HWM_LIBRARIES
-${GEMINI_ROOT}/lib/${CMAKE_${lib_type}_LIBRARY_PREFIX}hwm_ifc${CMAKE_${lib_type}_LIBRARY_SUFFIX}
-)
-
-# ExternalProject defined
-set(gemini3d_byproducts
-${GEMINI_LIBRARIES}
-${nc4fortran_LIBRARIES}
-${h5fortran_LIBRARIES}
-${MSIS_LIBRARIES}
-${HWM_LIBRARIES}
-)
-if(glow)
-  list(APPEND gemini3d_byproducts ${GLOW_LIBRARIES})
+if(BUILD_SHARED_LIBS)
+  if(WIN32)
+    set(GEMINI_LIBRARIES ${CMAKE_INSTALL_PREFIX}/bin/${CMAKE_SHARED_LIBRARY_PREFIX}gemini3d${CMAKE_SHARED_LIBRARY_SUFFIX})
+  else()
+    set(GEMINI_LIBRARIES ${CMAKE_INSTALL_PREFIX}/lib/${CMAKE_SHARED_LIBRARY_PREFIX}gemini3d${CMAKE_SHARED_LIBRARY_SUFFIX})
+  endif()
+else()
+  set(GEMINI_LIBRARIES ${CMAKE_INSTALL_PREFIX}/lib/${CMAKE_STATIC_LIBRARY_PREFIX}gemini3d${CMAKE_STATIC_LIBRARY_SUFFIX})
 endif()
 
+set(GEMINI_INCLUDE_DIRS ${CMAKE_INSTALL_PREFIX}/include)
+
+# ExternalProject defined
+
 set(gemini3d_args
---install-prefix=${GEMINI_ROOT}
+-DCMAKE_INSTALL_PREFIX:PATH=${CMAKE_INSTALL_PREFIX}
 -DBUILD_SHARED_LIBS:BOOL=${BUILD_SHARED_LIBS}
 -DBUILD_TESTING:BOOL=false
--Dautobuild:BOOL=off
+-Dautobuild:BOOL=false
 -Drealbits=64
 -Dglow:BOOL=${glow}
 -DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}
 )
+
+string(JSON gemini3d_git GET ${lib_json} gemini3d git)
+string(JSON gemini3d_tag GET ${lib_json} gemini3d tag)
 
 ExternalProject_Add(GEMINI3D_RELEASE
 GIT_REPOSITORY ${gemini3d_git}
 GIT_TAG ${gemini3d_tag}
 CMAKE_ARGS ${gemini3d_args} -DCMAKE_BUILD_TYPE=Release
 CMAKE_GENERATOR ${EXTPROJ_GENERATOR}
-BUILD_BYPRODUCTS ${gemini3d_byproducts}
+BUILD_BYPRODUCTS ${GEMINI_LIBRARIES}
 INACTIVITY_TIMEOUT 15
 CONFIGURE_HANDLED_BY_BUILD true
 )
@@ -84,18 +63,6 @@ target_include_directories(gemini3d::gemini3d INTERFACE ${GEMINI_INCLUDE_DIRS})
 file(MAKE_DIRECTORY ${GEMINI_INCLUDE_DIRS})
 # avoid generate race condition
 
-target_link_libraries(gemini3d::gemini3d INTERFACE
-${gemini3d_byproducts}
-MUMPS::MUMPS
-SCALAPACK::SCALAPACK
-LAPACK::LAPACK
-HDF5::HDF5
-ZLIB::ZLIB
-"$<$<BOOL:${HWLOC_FOUND}>:HWLOC::HWLOC>"
-MPI::MPI_Fortran
-${CMAKE_DL_LIBS}
-$<$<BOOL:${UNIX}>:m>
-)
-# libdl and libm are needed on some systems for HDF5
+target_link_libraries(gemini3d::gemini3d INTERFACE ${GEMINI3D_LIBRARIES})
 
 add_dependencies(gemini3d::gemini3d GEMINI3D_RELEASE)

@@ -1,17 +1,8 @@
-option(dev "development mode")
 option(glow "NCAR GLOW model" true)
 
+file(READ ${CMAKE_CURRENT_LIST_DIR}/libraries.json ${lib_json})
 
-if(dev)
-else()
-  set_directory_properties(PROPERTIES EP_UPDATE_DISCONNECTED true)
-endif()
-
-# --- naming shared/static
-set(lib_type STATIC)
-if(BUILD_SHARED_LIBS)
-  set(lib_type SHARED)
-endif()
+set_directory_properties(PROPERTIES EP_UPDATE_DISCONNECTED true)
 
 # --- External project generator
 if(CMAKE_GENERATOR STREQUAL "Ninja Multi-Config")
