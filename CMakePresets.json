@@ -7,8 +7,7 @@
   "binaryDir": "${sourceDir}/build",
   "installDir": "${sourceDir}/build",
   "cacheVariables": {
-    "CMAKE_BUILD_TYPE": "Release",
-    "package": false
+    "CMAKE_BUILD_TYPE": "Release"
   }
 },
 {
@@ -22,34 +21,6 @@
   "name": "multi", "inherits": "default",
   "displayName": "Ninja Multi config",
   "generator": "Ninja Multi-Config"
-},
-{
-  "name": "build", "inherits": "default",
-  "displayName": "build all libraries",
-  "description": "Build all external libraries (except MPI) without searching for existing libraries.",
-  "cacheVariables": {
-    "lapack_external": "on",
-    "scalapack_external": "on",
-    "mumps_external": "on",
-    "hdf5_external": "on"
-  }
-},
-{
-  "name": "intel", "inherits": "default",
-  "displayName": "Intel Classic compiler: Linux/MacOS",
-  "binaryDir": "${sourceDir}/build-intel",
-  "installDir": "${sourceDir}/build-intel",
-  "environment": {
-    "CC": "icx",
-    "FC": "ifort"
-  }
-},
-{
-  "name": "regen-package", "inherits": "default",
-  "displayName": "Prepare to regenerate reference data",
-  "cacheVariables": {
-    "package": true
-  }
 }
 ],
 "buildPresets": [
@@ -66,15 +37,6 @@
     "name": "debug",
     "configurePreset": "multi",
     "configuration": "Debug"
-  },
-  {
-    "name": "intel",
-    "configurePreset": "intel"
-  },
-  {
-    "name": "core",
-    "configurePreset": "default",
-    "targets": ["gemini.bin", "gemini3d.run", "gemini3d.compare"]
   }
 ],
 "testPresets": [
@@ -99,18 +61,6 @@
   "name": "debug", "inherits": "default",
   "configurePreset": "multi",
   "configuration": "Debug"
-},
-{
-  "name": "intel", "inherits": "default",
-  "configurePreset": "intel"
-},
-{
-  "name": "regen-package", "inherits": "default",
-  "configurePreset": "regen-package",
-  "description": "Regenerates .zstd reference data, by disabling compare",
-  "filter": {
-    "exclude": {"label": "compare"}
-  }
 }
 ]
 }
