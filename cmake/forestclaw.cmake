@@ -25,6 +25,7 @@ set(forestclaw_args
 -DBUILD_TESTING:BOOL=false
 -DCMAKE_PREFIX_PATH:PATH=${CMAKE_PREFIX_PATH}
 -Dmpi:BOOL=yes
+-Dclawpatch:BOOL=yes
 )
 
 string(JSON forestclaw_git GET ${lib_json} forestclaw git)
