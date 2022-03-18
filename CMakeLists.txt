@@ -31,9 +31,10 @@ find_package(hwm14 CONFIG)
 find_package(gemini3d CONFIG REQUIRED)
 
 # ForestClaw: build as ExternalProject
-cmake_path(SET CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ForestClawExternalProject)
-include(ForestClawExternalProject)
-ForestClawExternalProject(TAG develop COMPONENTS mpi clawpack)
+# cmake_path(SET CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ForestClawExternalProject)
+# include(ForestClawExternalProject)
+# ForestClawExternalProject(TAG develop COMPONENTS mpi clawpack)
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/forestclaw.cmake)
 
 # -- fortran library : dummy library containing .o files compiled from Fortran
 add_library(gemini_f OBJECT
