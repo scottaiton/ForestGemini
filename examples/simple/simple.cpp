@@ -27,11 +27,11 @@
 
 #include <fclaw2d_defs.h>
 
-//#include <gemini3d.h>
+#include <gemini3d.h>
 
 
 static
-fclaw2d_domain_t* create_domain(sc_MPI_Comm mpicomm, 
+fclaw2d_domain_t* create_domain(sc_MPI_Comm mpicomm,
                                 fclaw_options_t* fclaw_opt)
 {
     /* Mapped, multi-block domain */
@@ -52,7 +52,7 @@ fclaw2d_domain_t* create_domain(sc_MPI_Comm mpicomm,
 
     domain = fclaw2d_domain_new_conn_map (mpicomm, fclaw_opt->minlevel, conn, cont);
     fclaw2d_domain_list_levels(domain, FCLAW_VERBOSITY_ESSENTIAL);
-    fclaw2d_domain_list_neighbors(domain, FCLAW_VERBOSITY_DEBUG);  
+    fclaw2d_domain_list_neighbors(domain, FCLAW_VERBOSITY_DEBUG);
     return domain;
 }
 
@@ -84,18 +84,22 @@ void run_program(fclaw2d_global_t* glob)
     fclaw2d_initialize(glob);
     //fclaw2d_run(glob);
 
-    const char * out_dir_const = "mini3d_fang";
+    const char * out_dir_const = "./mini3d_fang";
     char * out_dir = (char *) out_dir_const;
-    int out_dir_len = strlen(out_dir);
-    int lid2in = -1;
-    int lid3in = -1;
-    bool use_cli = false;
 
-    int meqn;
-    double *q;
+    struct params p;
+    p.fortran_cli = false;
+    p.debug = false;
+    p.dryrun = false;
+    strcpy(p.out_dir, out_dir);
+    int lid2in = 1;
+    int lid3in = 1;
+
+    gemini_main(&p, &lid2in, &lid3in);
+
+    // int meqn;
+    // double *q;
 //    fclaw3dx_clawpatch_soln_data(glob,patch,&q,&meqn);
-
-//    gemini_main(out_dir,&out_dir_len,&lid2in,&lid3in,&use_cli,q);
 
     fclaw2d_finalize(glob);
 }
@@ -127,7 +131,7 @@ main (int argc, char **argv)
     fclaw_opt =                   fclaw_options_register(app,"fclaw_options.ini");
     clawpatch_opt =   fclaw3dx_clawpatch_options_register(app,"fclaw_options.ini");
     gem_opt =        fc3d_gemini_options_register(app,"fclaw_options.ini");
-    user_opt =                    simple_options_register(app,"fclaw_options.ini");  
+    user_opt =                    simple_options_register(app,"fclaw_options.ini");
 
     /* Read configuration file(s) and command line, and process options */
     options = fclaw_app_get_options (app);
@@ -141,7 +145,7 @@ main (int argc, char **argv)
 
         mpicomm = fclaw_app_get_mpi_size_rank (app, NULL, NULL);
         domain = create_domain(mpicomm, fclaw_opt);
-    
+
         /* Create global structure which stores the domain, timers, etc */
         glob = fclaw2d_global_new();
         fclaw2d_global_store_domain(glob, domain);
@@ -154,9 +158,9 @@ main (int argc, char **argv)
 
         run_program(glob);
 
-        fclaw2d_global_destroy(glob);        
+        fclaw2d_global_destroy(glob);
     }
-    
+
     fclaw_app_destroy (app);
 
     return 0;
