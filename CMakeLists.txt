@@ -30,6 +30,7 @@ find_package(glow CONFIG REQUIRED)
 find_package(hwm14 CONFIG)
 find_package(gemini3d CONFIG REQUIRED)
 find_package(SC REQUIRED)
+find_package(P4EST REQUIRED)
 
 # ForestClaw: build as ExternalProject
 # cmake_path(SET CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ForestClawExternalProject)
