@@ -4,7 +4,7 @@ project(FC3DGEMINI
 LANGUAGES C CXX Fortran
 )
 
-find_package(MPI COMPONENTS C Fortran REQUIRED)
+find_package(MPI COMPONENTS C CXX Fortran REQUIRED)
 
 enable_testing()
 
@@ -29,6 +29,7 @@ find_package(msis CONFIG REQUIRED)
 find_package(glow CONFIG REQUIRED)
 find_package(hwm14 CONFIG)
 find_package(gemini3d CONFIG REQUIRED)
+find_package(SC REQUIRED)
 
 # ForestClaw: build as ExternalProject
 # cmake_path(SET CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ForestClawExternalProject)
