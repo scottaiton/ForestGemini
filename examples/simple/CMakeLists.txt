@@ -20,6 +20,9 @@ target_include_directories(simple PRIVATE
 
 target_link_libraries(simple PRIVATE 
  fc3d_gemini
+ gemini3d::gemini3d_c
+ gemini3d::gemini3d
+ gemini3d::gemini3d_mpi
 )
 
 add_test(NAME examples_simple COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/regressions.sh WORKING_DIRECTORY ${CMAKE_BINARY_DIR})

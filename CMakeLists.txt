@@ -31,6 +31,7 @@ find_package(hwm14 CONFIG)
 find_package(gemini3d CONFIG REQUIRED)
 find_package(SC REQUIRED)
 find_package(P4EST REQUIRED)
+find_package(iniparser CONFIG REQUIRED)
 
 # ForestClaw: build as ExternalProject
 # cmake_path(SET CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ForestClawExternalProject)
@@ -56,7 +57,7 @@ $<TARGET_OBJECTS:gemini_f>
 )
 
 target_link_libraries(fc3d_gemini PUBLIC FORESTCLAW::CLAWPATCH FORESTCLAW::FORESTCLAW)
-target_link_libraries(fc3d_gemini PUBLIC gemini3d::gemini3d)
+#target_link_libraries(fc3d_gemini PUBLIC gemini3d::gemini3d gemini3d::gemini3d_c gemini3d::gemini3d_mpi) 
 
 target_include_directories(fc3d_gemini PUBLIC
 $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
