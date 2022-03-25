@@ -23,12 +23,15 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include <filesystem>
+
 #include "simple_user.h"
 
 #include <fclaw2d_defs.h>
 
 #include <gemini3d.h>
 
+namespace fs = std::filesystem;
 
 static
 fclaw2d_domain_t* create_domain(sc_MPI_Comm mpicomm,
@@ -57,7 +60,7 @@ fclaw2d_domain_t* create_domain(sc_MPI_Comm mpicomm,
 }
 
 static
-void run_program(fclaw2d_global_t* glob)
+int run_program(fclaw2d_global_t* glob)
 {
     const user_options_t           *user_opt;
 
@@ -84,14 +87,27 @@ void run_program(fclaw2d_global_t* glob)
     fclaw2d_initialize(glob);
     //fclaw2d_run(glob);
 
-    const char * out_dir_const = "./mini3d_fang";
-    char * out_dir = (char *) out_dir_const;
+  // simulation directory
+  fs::path out_dir(argv[1]);
+
+  if(! fs::is_directory(out_dir)) {
+    std::cerr << "ForestGemini simulation output directory does not exist: " << out_dir << std::endl;
+    return EXIT_FAILURE;
+  }
+
+  // Read config.ini
+  auto ini_file = out_dir / "inputs/config.ini";
+  if(! fs::is_regular_file(ini_file)) {
+    std::cerr << "Gemini3D: did not find config.ini: " << ini_file << std::endl;
+    return EXIT_FAILURE;
+  }
+
 
     struct params p;
     p.fortran_cli = false;
     p.debug = false;
     p.dryrun = false;
-    strcpy(p.out_dir, out_dir);
+    strncpy(p.out_dir, out_dir.string().c_str(), LMAX);
     int lid2in = 1;
     int lid3in = 1;
 
@@ -102,6 +118,8 @@ void run_program(fclaw2d_global_t* glob)
 //    fclaw3dx_clawpatch_soln_data(glob,patch,&q,&meqn);
 
     fclaw2d_finalize(glob);
+
+    return 0;
 }
 
 int
@@ -156,12 +174,12 @@ main (int argc, char **argv)
         fc3d_gemini_options_store        (glob, gem_opt);
         simple_options_store             (glob, user_opt);
 
-        run_program(glob);
+        retval = run_program(glob);
 
         fclaw2d_global_destroy(glob);
     }
 
     fclaw_app_destroy (app);
 
-    return 0;
+    return retval;
 }
