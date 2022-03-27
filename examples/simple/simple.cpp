@@ -23,6 +23,7 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+#include <iostream>
 #include <filesystem>
 
 #include "simple_user.h"
@@ -88,7 +89,7 @@ int run_program(fclaw2d_global_t* glob)
     //fclaw2d_run(glob);
 
   // simulation directory
-  fs::path out_dir(argv[1]);
+  fs::path out_dir(user_opt->sim_dir);
 
   if(! fs::is_directory(out_dir)) {
     std::cerr << "ForestGemini simulation output directory does not exist: " << out_dir << std::endl;

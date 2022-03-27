@@ -39,6 +39,9 @@ simple_register (user_options_t *user, sc_options_t * opt)
     sc_options_add_int (opt, 0, "claw-version", &user->claw_version, 4,
                            "Clawpack_version (4) [4]");
 
+    sc_options_add_string(opt, 0, "sim-dir", &user->sim_dir, NULL,
+                        "Simulation Directory");
+
     user->is_registered = 1;
 
     return NULL;
@@ -164,5 +167,5 @@ void simple_options_store (fclaw2d_global_t* glob, user_options_t* user)
 const user_options_t* simple_get_options(fclaw2d_global_t* glob)
 {
     int id = s_user_options_package_id;
-    return (user_options_t*) fclaw_package_get_options(glob, id);    
+    return (user_options_t*) fclaw_package_get_options(glob, id);
 }

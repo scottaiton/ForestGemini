@@ -55,6 +55,8 @@ typedef struct user_options
     int claw_version;
     int is_registered;
 
+    const char* sim_dir;
+
 } user_options_t;
 
 

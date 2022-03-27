@@ -13,8 +13,6 @@ add_executable(simple
   $<TARGET_OBJECTS:simple_f>
 )
 
-target_compile_features(simple PRIVATE cxx_std_17)
-
 target_include_directories(simple PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${all}
