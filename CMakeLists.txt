@@ -27,7 +27,7 @@ find_package(nc4fortran CONFIG REQUIRED) # dummy stub installed also from Gemini
 find_package(ffilesystem CONFIG REQUIRED)
 find_package(msis CONFIG REQUIRED)
 find_package(glow CONFIG REQUIRED)
-find_package(hwm14 CONFIG)
+find_package(hwm14 CONFIG REQUIRED)
 find_package(gemini3d CONFIG REQUIRED)
 find_package(SC REQUIRED)
 find_package(P4EST REQUIRED)
@@ -57,7 +57,7 @@ $<TARGET_OBJECTS:gemini_f>
 )
 
 target_link_libraries(fc3d_gemini PUBLIC FORESTCLAW::CLAWPATCH FORESTCLAW::FORESTCLAW)
-#target_link_libraries(fc3d_gemini PUBLIC gemini3d::gemini3d gemini3d::gemini3d_c gemini3d::gemini3d_mpi) 
+#target_link_libraries(fc3d_gemini PUBLIC gemini3d::gemini3d gemini3d::gemini3d_c gemini3d::gemini3d_mpi)
 
 target_include_directories(fc3d_gemini PUBLIC
 $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
