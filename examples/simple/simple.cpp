@@ -96,31 +96,32 @@ int run_program(fclaw2d_global_t* glob)
     return EXIT_FAILURE;
   }
 
-  // Read config.ini
+
+  struct params p;
+  p.fortran_cli = false;
+  p.debug = false;
+  p.dryrun = false;
+  strncpy(p.out_dir, out_dir.string().c_str(), LMAX);
+  int lid2in = 1;
+  int lid3in = 1;
+
   auto ini_file = out_dir / "inputs/config.ini";
-  if(! fs::is_regular_file(ini_file)) {
-    std::cerr << "Gemini3D: did not find config.ini: " << ini_file << std::endl;
-    return EXIT_FAILURE;
+  if(fs::is_regular_file(ini_file)) {
+    p.fortran_nml = false;
+  }
+  else{
+    p.fortran_nml = true;
   }
 
+  gemini_main(&p, &lid2in, &lid3in);
 
-    struct params p;
-    p.fortran_cli = false;
-    p.debug = false;
-    p.dryrun = false;
-    strncpy(p.out_dir, out_dir.string().c_str(), LMAX);
-    int lid2in = 1;
-    int lid3in = 1;
+  // int meqn;
+  // double *q;
+  //    fclaw3dx_clawpatch_soln_data(glob,patch,&q,&meqn);
 
-    gemini_main(&p, &lid2in, &lid3in);
+  fclaw2d_finalize(glob);
 
-    // int meqn;
-    // double *q;
-//    fclaw3dx_clawpatch_soln_data(glob,patch,&q,&meqn);
-
-    fclaw2d_finalize(glob);
-
-    return 0;
+  return 0;
 }
 
 int
