@@ -23,7 +23,7 @@ find_package(SCALAPACK REQUIRED)
 find_package(MUMPS COMPONENTS ${arith} REQUIRED)
 find_package(HDF5 COMPONENTS C Fortran REQUIRED)
 find_package(h5fortran CONFIG REQUIRED)
-find_package(nc4fortran CONFIG REQUIRED)
+# find_package(nc4fortran CONFIG)  # typically use HDF5
 find_package(ffilesystem CONFIG REQUIRED)
 find_package(msis CONFIG REQUIRED)
 find_package(glow CONFIG REQUIRED)
