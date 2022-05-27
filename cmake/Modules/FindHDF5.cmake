@@ -160,8 +160,19 @@ if(NOT ZLIB_ROOT)
   set(ZLIB_ROOT "${HDF5_ROOT};${zlib_dir}")
 endif()
 
+
+set(hdf5_prereqs true PARENT_SCOPE)
+
 if(hdf5_have_zlib)
-  find_package(ZLIB)
+  if(HDF5_FIND_REQUIRED)
+    find_package(ZLIB REQUIRED)
+  else()
+    find_package(ZLIB)
+  endif()
+  if(NOT ZLIB_FOUND)
+    set(hdf5_prereqs false PARENT_SCOPE)
+    return()
+  endif()
 
   if(hdf5_have_szip)
     # Szip even though not used by default.
@@ -170,7 +181,16 @@ if(hdf5_have_zlib)
     if(NOT SZIP_ROOT)
       set(SZIP_ROOT ${ZLIB_ROOT})
     endif()
-    find_package(SZIP)
+    if(HDF5_FIND_REQUIRED)
+      find_package(SZIP REQUIRED)
+    else()
+      find_package(SZIP)
+    endif()
+    if(NOT SZIP_FOUND)
+      set(hdf5_prereqs false PARENT_SCOPE)
+      return()
+    endif()
+
     list(APPEND CMAKE_REQUIRED_INCLUDES ${SZIP_INCLUDE_DIRS})
     list(APPEND CMAKE_REQUIRED_LIBRARIES ${SZIP_LIBRARIES})
   endif()
@@ -204,15 +224,35 @@ endif()
 
 hdf5_fortran_wrap(hdf5_lib_dirs hdf5_inc_dirs)
 
+if(MSVC)
+  set(CMAKE_FIND_LIBRARY_PREFIXES lib)
+endif()
+
 set(_names hdf5_fortran)
 set(_hl_names hdf5_hl_fortran hdf5hl_fortran)
 set(_hl_stub_names hdf5_hl_f90cstub)
 set(_stub_names hdf5_f90cstub)
+
+# distro names (Ubuntu)
+if(parallel IN_LIST HDF5_FIND_COMPONENTS)
+  list(APPEND _names hdf5_openmpi_fortran hdf5_mpich_fortran)
+  list(APPEND _hl_names hdf5_openmpihl_fortran hdf5_mpichhl_fortran)
+else()
+  list(APPEND _names hdf5_serial_fortran)
+  list(APPEND _hl_names hdf5_serialhl_fortran)
+endif()
+
+# Debug names
 if(MSVC)
-  list(APPEND _names libhdf5_fortran)
-  list(APPEND _hl_names libhdf5_hl_fortran libhdf5hl_fortran)
-  list(APPEND _hl_stub_names libhdf5_hl_f90cstub)
-  list(APPEND _stub_names libhdf5_f90cstub)
+  list(APPEND _names hdf5_fortran_D)
+  list(APPEND _hl_names hdf5_hl_fortran_D)
+  list(APPEND _hl_stub_names hdf5_hl_f90cstub_D)
+  list(APPEND _stub_names hdf5_f90cstub_D)
+else()
+  list(APPEND _names hdf5_fortran_debug)
+  list(APPEND _hl_names hdf5_hl_fortran_debug)
+  list(APPEND _hl_stub_names hdf5_hl_f90cstub_debug)
+  list(APPEND _stub_names hdf5_f90cstub_debug)
 endif()
 
 find_library(HDF5_Fortran_LIBRARY
@@ -322,11 +362,29 @@ function(find_hdf5_cxx)
 
 hdf5_cxx_wrap(hdf5_lib_dirs hdf5_inc_dirs)
 
+if(MSVC)
+  set(CMAKE_FIND_LIBRARY_PREFIXES lib)
+endif()
+
 set(_names hdf5_cpp)
 set(_hl_names hdf5_hl_cpp)
+
+# distro names (Ubuntu)
+if(parallel IN_LIST HDF5_FIND_COMPONENTS)
+  list(APPEND _names hdf5_openmpi_cpp hdf5_mpich_cpp)
+  list(APPEND _hl_names hdf5_openmpi_hl_cpp hdf5_mpich_hl_cpp)
+else()
+  list(APPEND _names hdf5_serial_cpp)
+  list(APPEND _hl_names hdf5_serial_hl_cpp)
+endif()
+
+# Debug names
 if(MSVC)
-  list(APPEND _names libhdf5_cpp)
-  list(APPEND _hl_names libhdf5_hl_cpp)
+  list(APPEND _names hdf5_cpp_D)
+  list(APPEND _hl_names hdf5_hl_cpp_D)
+else()
+  list(APPEND _names hdf5_cpp_debug)
+  list(APPEND _hl_names hdf5_hl_cpp_debug)
 endif()
 
 find_library(HDF5_CXX_LIBRARY
@@ -365,12 +423,29 @@ function(find_hdf5_c)
 
 hdf5_c_wrap(hdf5_lib_dirs hdf5_inc_dirs)
 
+if(MSVC)
+  set(CMAKE_FIND_LIBRARY_PREFIXES lib)
+endif()
+
 set(_names hdf5)
 set(_hl_names hdf5_hl)
 
+# distro names (Ubuntu)
+if(parallel IN_LIST HDF5_FIND_COMPONENTS)
+  list(APPEND _names hdf5_openmpi hdf5_mpich)
+  list(APPEND _hl_names hdf5_openmpi_hl hdf5_mpich_hl)
+else()
+  list(APPEND _names hdf5_serial)
+  list(APPEND _hl_names hdf5_serial_hl)
+endif()
+
+# debug names
 if(MSVC)
-  list(APPEND _names libhdf5)
-  list(APPEND _hl_names libhdf5_hl)
+  list(APPEND _names hdf5_D)
+  list(APPEND _hl_names hdf5_hl_D)
+else()
+  list(APPEND _names hdf5_debug)
+  list(APPEND _hl_names hdf5_hl_debug)
 endif()
 
 # MUST have HDF5_ROOT in HINTS here since it was set in this script
@@ -656,7 +731,7 @@ endfunction(check_fortran_links)
 
 function(check_hdf5_link)
 
-if(NOT HDF5_C_FOUND)
+if(NOT (hdf5_prereqs AND HDF5_C_FOUND))
   return()
 endif()
 
@@ -777,11 +852,11 @@ if(HDF5_C_FOUND)
   detect_config()
 endif(HDF5_C_FOUND)
 
-if(HDF5_C_FOUND AND CXX IN_LIST HDF5_FIND_COMPONENTS)
+if(hdf5_prereqs AND HDF5_C_FOUND AND CXX IN_LIST HDF5_FIND_COMPONENTS)
   find_hdf5_cxx()
 endif()
 
-if(HDF5_C_FOUND AND Fortran IN_LIST HDF5_FIND_COMPONENTS)
+if(hdf5_prereqs AND HDF5_C_FOUND AND Fortran IN_LIST HDF5_FIND_COMPONENTS)
   find_hdf5_fortran()
 endif()
 
@@ -795,9 +870,10 @@ set(CMAKE_REQUIRED_INCLUDES)
 # pop off ignored paths so rest of script can find Python
 list(REMOVE_ITEM CMAKE_IGNORE_PATH ${h5_ignore_path})
 
+
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(HDF5
-REQUIRED_VARS HDF5_C_LIBRARIES HDF5_links
+REQUIRED_VARS HDF5_C_LIBRARIES HDF5_links hdf5_prereqs
 VERSION_VAR HDF5_VERSION
 HANDLE_COMPONENTS
 HANDLE_VERSION_RANGE
